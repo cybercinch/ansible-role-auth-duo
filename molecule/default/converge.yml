@@ -2,9 +2,9 @@
 - name: Converge
   hosts: all
   tasks:
-    - name: "Include auth_duo"
+    - name: "Include auth-duo"
       include_role:
-        name: "auth_duo"
+        name: "auth-duo"
       vars:
         auth_duo_settings:
           - key: ikey

@@ -8,12 +8,12 @@ services:
 
 env:
   global:
-    - ROLE_NAME: auth_duo
+    - ROLE_NAME: auth-duo
 
 before_script:
   # Use actual role name for the project directory.
   - cd ../
-  - mv ansible-role-$ROLE_NAME $ROLE_NAME
+  - mv cybercinch/ansible-role-$ROLE_NAME $ROLE_NAME
   - cd $ROLE_NAME
 
 install:
