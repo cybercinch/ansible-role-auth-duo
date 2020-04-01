@@ -13,7 +13,7 @@ env:
 before_script:
   # Use actual role name for the project directory.
   - cd ../
-  - mv cybercinch/ansible-role-$ROLE_NAME $ROLE_NAME
+  - mv ansible-role-$ROLE_NAME $ROLE_NAME
   - cd $ROLE_NAME
 
 install:
