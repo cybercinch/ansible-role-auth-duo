@@ -1,0 +1,22 @@
+---
+- name: Prepare
+  hosts: all
+  tasks:
+    - name: ensure openssh installed
+      yum:
+        name: openssh-server, openssh-clients, sshpass
+        state: installed
+
+    - name: ensure sshd is running
+      service:
+        name: sshd
+        state: started
+        enabled: true
+        
+    - name: ensure nologin files are absent
+      file: 
+        path: "{{ item }}"
+        state: absent
+      with_items: 
+        - /etc/nologin
+        - /var/run/nologin

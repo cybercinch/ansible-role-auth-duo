@@ -1,0 +1,46 @@
+---
+# tasks file for auth_duo
+- name: Include repository install
+  include_tasks: duo-repo.yml
+  when: auth_duo_install_repo
+
+- name: Ensure duo is installed
+  yum:
+    name: duo_unix
+    enablerepo: "{{ auth_duo_reponame }}"
+    state: installed
+
+# - name: Ensure ikey is populated
+#   fail:
+#     msg: "ikey should not be 'someikey' see defaults/main.yml"
+#   when: 
+
+- name: Ensure Duo configuration in place
+  ini_file: 
+    path: /etc/duo/pam_duo.conf
+    section: duo
+    option: "{{ item.key }}"
+    value: "{{ item.value }}"
+  with_items: "{{ auth_duo_settings }}"
+  no_log: true
+
+- name: Ensure PAM for SSH is configured with duo MFA
+  copy:
+    src: etc.pam.d.sshd
+    dest: /etc/pam.d/sshd
+  notify: restart sshd
+
+- name: Ensure PAM is enabled for SSH 
+  lineinfile: 
+    path: /etc/ssh/sshd_config
+    regexp: "{{ item.regex }}"
+    line: "{{ item.line }}"
+  with_items: 
+    - regex: '^UsePAM '
+      line: 'UsePAM yes'
+    - regex: '^ChallengeResponseAuthentication '
+      line: 'ChallengeResponseAuthentication yes'
+  notify: restart sshd
+
+- name: Flush Handlers
+  meta: flush_handlers

@@ -1,0 +1,11 @@
+---
+- name: Ensure Duo GPG Key is installed
+  rpm_key:
+    key: https://duo.com/DUO-GPG-PUBLIC-KEY.asc
+    state: present
+
+- name: Ensure duo repository is present
+  copy:
+    src: etc.yum.repos.d.duosecurity
+    dest: /etc/yum.repos.d/duosecurity.repo
+    

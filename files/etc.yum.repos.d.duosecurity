@@ -1,0 +1,6 @@
+## Managed by Ansible ##
+[duosecurity]
+name=Duo Security Repository
+baseurl=https://pkg.duosecurity.com/RedHat/"$releasever"Server/$basearch
+enabled=1
+gpgcheck=1

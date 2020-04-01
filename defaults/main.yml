@@ -1,0 +1,14 @@
+---
+# defaults file for auth_duo
+auth_duo_install_repo: true
+auth_duo_reponame: duosecurity
+# The settings which will be applied to  /etc/duo/login_duo.conf
+# Minimal settings are ikey, skey and host
+# For more please check https://duo.com/docs/duounix#duo-configuration-options
+auth_duo_settings:
+  - key: ikey
+    value: someikey
+  - key: skey
+    value: someskey
+  - key: host
+    value: somehost

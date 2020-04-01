@@ -1,0 +1,28 @@
+---
+# This is an example playbook to execute Ansible tests.
+
+- name: Verify
+  hosts: all
+  pre_tasks: 
+    - name: Create test user
+      shell: 
+        cmd: adduser "auth_duo_test" && echo "password" | passwd "auth_duo_test" --stdin
+  tasks:
+  - name: Try and Login as test user
+    shell: |
+      /usr/bin/sshpass -v -p password \
+      /usr/bin/ssh -tt -o "UserKnownHostsFile=/dev/null" \
+      -o "StrictHostKeyChecking=no" \
+      auth_duo_test@localhost > /tmp/sshtest 2>&1 | tee /tmp/sshtest
+    async: 20
+    poll: 10
+    ignore_errors: true
+  
+  - name: Retrieve SSH login info from file
+    slurp:
+      src: /tmp/sshtest
+    register: slurpfile
+
+  - name: Did duo prompt show?
+    assert:
+      that: "'Duo two-factor login for auth_duo_test' in slurpfile['content'] | b64decode"

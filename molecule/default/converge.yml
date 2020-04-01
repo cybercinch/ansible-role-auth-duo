@@ -1,0 +1,15 @@
+---
+- name: Converge
+  hosts: all
+  tasks:
+    - name: "Include auth_duo"
+      include_role:
+        name: "auth_duo"
+      vars:
+        auth_duo_settings:
+          - key: ikey
+            value: "{{ lookup('env','AUTH_DUO_IKEY') }}"
+          - key: skey
+            value: "{{ lookup('env','AUTH_DUO_SKEY') }}" 
+          - key: host
+            value: "{{ lookup('env','AUTH_DUO_HOST') }}" 
