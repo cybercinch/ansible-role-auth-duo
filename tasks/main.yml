@@ -44,3 +44,19 @@
 
 - name: Flush Handlers
   meta: flush_handlers
+
+- name: Duo SELinux Enablement
+  block:
+    - name: Copy SELinux Module
+      copy:
+        src: files/duo.pp
+        dest: /tmp/duo.pp
+
+    - name: Install Policy (Ensure we can access DUO Api)
+      command: /usr/sbin/semodule -i /tmp/duo.pp
+
+    - name: Remove Policy file
+      file:
+        path: /tmp/duo.pp
+        state: absent
+  
